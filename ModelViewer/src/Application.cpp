@@ -19,6 +19,12 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/ShowImage.h"
+#include "Variables.h"
+
+//窗口大小变化时，重新设置视口
+void framebuff_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
 
 int main(void)
 {
@@ -26,11 +32,16 @@ int main(void)
 
     if (!glfwInit())    return -1;
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(1920, 1080, "Model Viewer - Made By AlerHuGhe$", NULL, NULL);
+    int monitorCount;
+    GLFWmonitor* pMonitor = glfwGetPrimaryMonitor();
+    mode = glfwGetVideoMode(pMonitor);
+    mode->width / mode->height;
+
+    window = glfwCreateWindow(mode->width, mode->height, "Model Viewer - Made By AlerHuGhe$", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -44,6 +55,8 @@ int main(void)
     if (glewInit() != GLEW_OK)
         std::cout << "ERROR!" << std::endl;
     std::cout << glGetString(GL_VERSION) << std::endl;
+
+    glfwSetFramebufferSizeCallback(window, framebuff_size_callback);
 
     {
         GLCall(glEnable(GL_BLEND));

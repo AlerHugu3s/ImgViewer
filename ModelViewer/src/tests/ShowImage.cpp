@@ -1,11 +1,12 @@
 #include "ShowImage.h"
+#include "Variables.h"
 
 test::ShowImage::ShowImage()       
 	:positions{
-	400.0f , -400.0f, 0.0f, 0.0f,//0
-	-400.0f, -400.0f, 1.0f, 0.0f,//1
-	-400.0f, 400.0f , 1.0f, 1.0f,//2
-	400.0f , 400.0f , 0.0f, 1.0f //3
+	-400.0f , -400.0f, 0.0f, 0.0f,//0
+	400.0f, -400.0f, 1.0f, 0.0f,//1
+	400.0f, 400.0f , 1.0f, 1.0f,//2
+	-400.0f , 400.0f , 0.0f, 1.0f //3
 	},
 	indices{ 
 	0, 1, 2,
@@ -22,11 +23,11 @@ test::ShowImage::ShowImage()
 	//ÎªVAO°ó¶¨VartexBufferºÍVertexBufferLayout
 	va.AddBuffer(vb, layout);
 
-	proj = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, -1.0f, 1.0f);
+	proj = glm::ortho(0.0f, (float)mode->width, 0.0f, (float)mode->height, -1.0f, 1.0f);
 	view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	shader.Bind();
-	shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+	//shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 	texture.Bind(0);
 	shader.SetUniform1i("u_Texture", 0);
@@ -61,8 +62,8 @@ void test::ShowImage::OnImGuiRender()
 {
 	ImGui::Begin("TransformA");
 	ImGui::Text("position");
-	ImGui::SliderFloat("x", &translation.x, 0.0f, 1920.0f);
-	ImGui::SliderFloat("y", &translation.y, 0.0f, 1080.0f);
+	ImGui::SliderFloat("x", &translation.x, 0.0f, mode->width);
+	ImGui::SliderFloat("y", &translation.y, 0.0f, mode->height);
 	ImGui::SliderFloat("z", &translation.z, -1.0f, 1.0f);
 	ImGui::End();
 }
